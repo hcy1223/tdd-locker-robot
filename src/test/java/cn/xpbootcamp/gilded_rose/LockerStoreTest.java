@@ -1,5 +1,8 @@
 package cn.xpbootcamp.gilded_rose;
 
+import cn.xpbootcamp.gilded_rose.exception.NoEmptyCupboardException;
+import cn.xpbootcamp.gilded_rose.locker.Locker;
+import cn.xpbootcamp.gilded_rose.locker.Ticket;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -14,7 +17,7 @@ public class LockerStoreTest {
         Ticket ticket = locker.store();
 
 //        then
-        assertEquals(locker.getStatus(ticket.getNumber()), 1);
+        assertTrue(locker.locked(ticket.getNumber()));
         assertNotNull(ticket.getPassword());
         assertEquals(locker.getEmptyCount(), 18);
     }

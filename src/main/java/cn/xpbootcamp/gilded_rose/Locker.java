@@ -17,10 +17,13 @@ public class Locker {
     }
 
     public Ticket store() {
+        if (emptyCupboards.size() < 1) {
+            throw new NoEmptyCupboardException("no empty cupboard");
+        }
         int number = emptyCupboards.get(0);
         String password = Long.toHexString(System.currentTimeMillis());
-        emptyCupboards.remove(0);
         this.usedCupboards.put(number, new Cupboard(1, password));
+        emptyCupboards.remove(0);
         return new Ticket(number, password);
     }
 

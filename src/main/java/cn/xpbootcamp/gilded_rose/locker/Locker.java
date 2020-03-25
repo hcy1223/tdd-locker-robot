@@ -3,19 +3,17 @@ package cn.xpbootcamp.gilded_rose.locker;
 
 import cn.xpbootcamp.gilded_rose.exception.NoEmptyCupboardException;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 
 public class Locker {
-    private List<Integer> emptyCupboards;
+    private Queue<Integer> emptyCupboards;
     private Map<Integer, Cupboard> usedCupboards;
 
     public Locker(int totalCount) {
-        this.emptyCupboards = IntStream.range(0, totalCount).boxed().collect(Collectors.toList());
+        this.emptyCupboards = IntStream.range(0, totalCount).boxed().collect(Collectors.toCollection(LinkedList::new));
         this.usedCupboards = new HashMap<>();
     }
 
@@ -24,12 +22,15 @@ public class Locker {
             throw new NoEmptyCupboardException("no empty cupboard");
         }
 
-        int number = emptyCupboards.get(0);
-        String password = Long.toHexString(System.currentTimeMillis());
+        int number = emptyCupboards.remove();
+        String password = generatePassword();
 
         this.usedCupboards.put(number, new Cupboard(password));
-        emptyCupboards.remove(0);
         return new Ticket(number, password);
+    }
+
+    private String generatePassword() {
+        return Long.toHexString(System.currentTimeMillis());
     }
 
     public boolean locked(int number) {
@@ -39,4 +40,5 @@ public class Locker {
     public int getEmptyCount() {
         return this.emptyCupboards.size();
     }
+
 }

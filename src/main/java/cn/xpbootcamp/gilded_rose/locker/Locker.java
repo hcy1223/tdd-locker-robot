@@ -12,9 +12,14 @@ public class Locker {
     private Queue<Integer> emptyCupboards;
     private Map<Integer, Cupboard> usedCupboards;
 
-    public Locker(int totalCount) {
-        this.emptyCupboards = IntStream.range(0, totalCount).boxed().collect(Collectors.toCollection(LinkedList::new));
+    public Locker(Queue<Integer> emptyCupboards) {
+        this.emptyCupboards = emptyCupboards;
         this.usedCupboards = new HashMap<>();
+    }
+
+    public static Locker createLocker(int totalCount) {
+        Queue<Integer> emptyCupboards = IntStream.range(0, totalCount).boxed().collect(Collectors.toCollection(LinkedList::new));
+        return new Locker(emptyCupboards);
     }
 
     public Ticket store() {

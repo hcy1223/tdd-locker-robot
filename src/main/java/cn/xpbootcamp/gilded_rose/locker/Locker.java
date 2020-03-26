@@ -1,61 +1,56 @@
 package cn.xpbootcamp.gilded_rose.locker;
 
+import cn.xpbootcamp.gilded_rose.exception.InvalidPasswordException;
 import cn.xpbootcamp.gilded_rose.exception.NoEmptyCupboardException;
 import cn.xpbootcamp.gilded_rose.exception.RandomPasswordException;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
-import java.util.Queue;
 import java.util.Random;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
 
 public class Locker {
 
+    public static final int START_INDEX = 1;
     private static final int PASSWORD_LENGTH = 6;
     private static final int RANDOM_PASSWORD_TRY_TIMES = 20;
     private static final String CHARS = "0123456789";
-    private Queue<Integer> emptyCupboards;
-    private Map<Integer, Cupboard> usedCupboards;
+    private List<Cupboard> cupboards;
 
-    public Locker(Queue<Integer> emptyCupboards) {
-        this.emptyCupboards = emptyCupboards;
-        this.usedCupboards = new HashMap<>();
+    private Locker(List<Cupboard> boards) {
+        this.cupboards = boards;
     }
 
     public static Locker createLocker(int totalCount) {
-        Queue<Integer> emptyCupboards = IntStream.range(0, totalCount).boxed().collect(Collectors.toCollection(LinkedList::new));
-        return new Locker(emptyCupboards);
+        List<Cupboard> cupboards = new ArrayList<>(totalCount);
+        for (int i = 0; i < totalCount; i++) {
+            cupboards.add(new Cupboard(i + START_INDEX));
+        }
+        return new Locker(cupboards);
     }
 
     public Ticket store() {
-        if (emptyCupboards.size() < 1) {
+        if (getEmptyCount() < 1) {
             throw new NoEmptyCupboardException("no empty cupboard");
         }
 
-        int number = emptyCupboards.remove();
+        Cupboard board = cupboards.stream().filter(x -> x.getPassword() == null).findFirst().get();
         String password = null;
-        try{
+        try {
             password = generatePassword(RANDOM_PASSWORD_TRY_TIMES);
-        } catch (RandomPasswordException e){
+        } catch (RandomPasswordException e) {
             throw e;
         }
-
-        this.usedCupboards.put(number, new Cupboard(number, password));
-        return new Ticket(number, password);
+        board.setPassword(password);
+        return new Ticket(board.getNumber(), password);
     }
 
     private String generatePassword(int maxTimes) throws RandomPasswordException {
-        if(maxTimes <= 0) {
+        if (maxTimes <= 0) {
             throw new RandomPasswordException("Failed to generate password");
         }
         String password = getRandomStr(PASSWORD_LENGTH);
-        if(!usedCupboards.isEmpty()) {
-            if(usedCupboards.values().stream().filter(x->x.isMatch(password)).findAny().isPresent()) {
-                return generatePassword(maxTimes--);
-            }
+        if (cupboards.stream().filter(x -> x.isMatch(password)).findAny().isPresent()) {
+            return generatePassword(maxTimes--);
         }
         return password;
     }
@@ -70,17 +65,21 @@ public class Locker {
         return sb.toString();
     }
 
-
     public boolean locked(int number) {
-        return this.usedCupboards.containsKey(number);
+        return cupboards.stream().filter(x -> x.getNumber() == number).findFirst().get().getPassword() != null;
     }
 
     public int getEmptyCount() {
-        return this.emptyCupboards.size();
+        return (int) this.cupboards.stream().filter(x -> x.getPassword() == null).count();
     }
 
     public Cupboard pick(String password) {
-        return null;
+        Optional<Cupboard> boardOpt = cupboards.stream().filter(x -> x.isMatch(password)).findAny();
+        if (boardOpt.isPresent()) {
+            Cupboard board = boardOpt.get();
+            board.setPassword(null);
+            return board;
+        }
+        throw new InvalidPasswordException("Invalid password");
     }
-
 }

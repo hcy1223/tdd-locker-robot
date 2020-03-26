@@ -6,7 +6,7 @@ import cn.xpbootcamp.gilded_rose.locker.Ticket;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
-
+import static cn.xpbootcamp.gilded_rose.locker.Locker.START_INDEX;
 import static cn.xpbootcamp.gilded_rose.locker.Locker.createLocker;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -40,7 +40,7 @@ public class LockerStoreTest {
 //        when
         Ticket ticket = locker.store();
 //        then
-        assertEquals(ticket.getNumber(), 0);
+        assertEquals(ticket.getNumber(), START_INDEX);
         assertTrue(locker.locked(ticket.getNumber()));
         assertNotNull(ticket.getPassword());
         assertEquals(locker.getEmptyCount(), 0);

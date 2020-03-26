@@ -7,19 +7,23 @@ public class Cupboard {
     private String password;
     private int number;
 
-    public Cupboard(int number, String password) {
+    public Cupboard(int number) {
         this.number = number;
-        this.password = password;
     }
 
     public int getNumber() {
         return number;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public boolean isMatch(String password) {
-        if (isNull(password)) {
-            return false;
-        }
-        return password.equalsIgnoreCase(this.password);
+        return !isNull(password) && password.equalsIgnoreCase(this.password);
     }
 }

@@ -3,7 +3,10 @@ package cn.xpbootcamp.gilded_rose;
 import static cn.xpbootcamp.gilded_rose.locker.Locker.createLocker;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import cn.xpbootcamp.gilded_rose.exception.InvalidPasswordException;
 import cn.xpbootcamp.gilded_rose.locker.Cupboard;
 import cn.xpbootcamp.gilded_rose.locker.Locker;
 import cn.xpbootcamp.gilded_rose.locker.Ticket;
@@ -24,5 +27,25 @@ public class LockerPickTest {
         assertEquals(ticket.getNumber(), board.getNumber());
         assertNotNull(board);
         assertEquals(locker.getEmptyCount(), 19);
+    }
+
+    @Test
+    void should_throw_exception_when_pick_given_wrong_password() {
+//        given
+        Locker locker = createLocker(19);
+        locker.store();
+
+        Cupboard board = null;
+        try {
+            //        when
+            board = locker.pick("wrong");
+
+        } catch(InvalidPasswordException e) {
+            //        then
+            assertNull(board);
+        } finally{
+            //        then
+            assertEquals(locker.getEmptyCount(), 18);
+        }
     }
 }

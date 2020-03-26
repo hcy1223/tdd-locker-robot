@@ -48,4 +48,27 @@ public class LockerPickTest {
             assertEquals(locker.getEmptyCount(), 18);
         }
     }
+
+
+    @Test
+    void should_throw_exception_when_pick_given_used_password() {
+//        given
+        Locker locker = createLocker(1);
+        Ticket ticket = locker.store();
+        locker.pick(ticket.getPassword());
+
+        Cupboard board = null;
+        try {
+            //        when
+            board = locker.pick(ticket.getPassword());
+
+        } catch(InvalidPasswordException e) {
+            //        then
+            assertNull(board);
+        } finally{
+            //        then
+            assertEquals(locker.getEmptyCount(), 1);
+        }
+    }
+
 }

@@ -2,6 +2,7 @@ package cn.xpbootcamp.gilded_rose;
 
 import static cn.xpbootcamp.gilded_rose.locker.Locker.createLocker;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -9,6 +10,8 @@ import cn.xpbootcamp.gilded_rose.exception.InvalidPasswordException;
 import cn.xpbootcamp.gilded_rose.locker.Cupboard;
 import cn.xpbootcamp.gilded_rose.locker.Locker;
 import cn.xpbootcamp.gilded_rose.locker.Ticket;
+import java.util.HashSet;
+import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 public class LockerPickTest {
@@ -64,6 +67,23 @@ public class LockerPickTest {
         } finally {
             //        then
             assertEquals(locker.getEmptyCount(), 1);
+        }
+    }
+
+    @Test
+    void should_return_different_password_when_store_given_almost_fully_cupboards() {
+        //        given
+        int maxCap = 10000;
+        Locker locker = createLocker(maxCap);
+        Set<String> passwords = new HashSet<String>(maxCap);
+        for (int i = 0; i < maxCap; i++) {
+
+            // when
+            Ticket ticket = locker.store();
+
+            // then
+            assertFalse(passwords.contains(ticket.getPassword()));
+            passwords.add(ticket.getPassword());
         }
     }
 }

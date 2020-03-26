@@ -28,6 +28,16 @@ public class Locker {
         return new Locker(cupboards);
     }
 
+    private static String getRandomStr(int length) {
+        Random random = new Random();
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < length; i++) {
+            int number = random.nextInt(10);
+            sb.append(CHARS.charAt(number));
+        }
+        return sb.toString();
+    }
+
     public Ticket store() {
         if (getEmptyCount() < 1) {
             throw new NoEmptyCupboardException("no empty cupboard");
@@ -53,16 +63,6 @@ public class Locker {
             return generatePassword(maxTimes--);
         }
         return password;
-    }
-
-    private static String getRandomStr(int length) {
-        Random random = new Random();
-        StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < length; i++) {
-            int number = random.nextInt(10);
-            sb.append(CHARS.charAt(number));
-        }
-        return sb.toString();
     }
 
     public boolean locked(int number) {

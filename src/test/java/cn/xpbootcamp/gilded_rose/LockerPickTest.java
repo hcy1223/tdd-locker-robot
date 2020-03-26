@@ -4,7 +4,6 @@ import static cn.xpbootcamp.gilded_rose.locker.Locker.createLocker;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import cn.xpbootcamp.gilded_rose.exception.InvalidPasswordException;
 import cn.xpbootcamp.gilded_rose.locker.Cupboard;
@@ -39,16 +38,14 @@ public class LockerPickTest {
         try {
             //        when
             board = locker.pick("wrong");
-
-        } catch(InvalidPasswordException e) {
+        } catch (InvalidPasswordException e) {
             //        then
             assertNull(board);
-        } finally{
+        } finally {
             //        then
             assertEquals(locker.getEmptyCount(), 18);
         }
     }
-
 
     @Test
     void should_throw_exception_when_pick_given_used_password() {
@@ -61,14 +58,12 @@ public class LockerPickTest {
         try {
             //        when
             board = locker.pick(ticket.getPassword());
-
-        } catch(InvalidPasswordException e) {
+        } catch (InvalidPasswordException e) {
             //        then
             assertNull(board);
-        } finally{
+        } finally {
             //        then
             assertEquals(locker.getEmptyCount(), 1);
         }
     }
-
 }

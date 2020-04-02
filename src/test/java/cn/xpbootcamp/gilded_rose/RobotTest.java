@@ -1,5 +1,6 @@
 package cn.xpbootcamp.gilded_rose;
 
+import cn.xpbootcamp.gilded_rose.exception.InvalidTicketException;
 import cn.xpbootcamp.gilded_rose.exception.NoEmptyLockersException;
 import cn.xpbootcamp.gilded_rose.locker.Bag;
 import cn.xpbootcamp.gilded_rose.locker.Locker;
@@ -67,5 +68,21 @@ public class RobotTest {
         assertEquals(bag, pickBag);
         assertEquals(firstLocker.getEmptyCount(), 1);
         assertEquals(secondLocker.getEmptyCount(), 2);
+    }
+
+
+    @Test
+    void should_throw_exception_when_pick_given_invalid_ticket() {
+        Locker firstLocker = createLocker(1);
+        Locker secondLocker = createLocker(2);
+        Robot robot = new Robot(asList(firstLocker, secondLocker));
+        Bag bag = new Bag();
+
+        Ticket ticket = robot.store(bag);
+
+        Ticket invalidTicket = new Ticket();
+        assertThrows(InvalidTicketException.class, () -> {
+            Bag pickBag = robot.pick(invalidTicket);
+        });
     }
 }

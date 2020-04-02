@@ -1,6 +1,4 @@
 package cn.xpbootcamp.gilded_rose.locker;
 
-public class Ticket {
-
-
+public class Bag {
 }

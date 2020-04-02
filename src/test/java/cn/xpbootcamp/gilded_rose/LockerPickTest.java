@@ -1,18 +1,14 @@
 package cn.xpbootcamp.gilded_rose;
 
-import static cn.xpbootcamp.gilded_rose.locker.Locker.createLocker;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-
-import cn.xpbootcamp.gilded_rose.exception.InvalidPasswordException;
-import cn.xpbootcamp.gilded_rose.locker.Cupboard;
+import cn.xpbootcamp.gilded_rose.exception.InvalidTicketException;
+import cn.xpbootcamp.gilded_rose.locker.Bag;
 import cn.xpbootcamp.gilded_rose.locker.Locker;
 import cn.xpbootcamp.gilded_rose.locker.Ticket;
-import java.util.HashSet;
-import java.util.Set;
 import org.junit.jupiter.api.Test;
+
+import static cn.xpbootcamp.gilded_rose.locker.Locker.createLocker;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class LockerPickTest {
 
@@ -20,70 +16,43 @@ public class LockerPickTest {
     void should_return_cupboard_when_pick_given_correct_password() {
 //        given
         Locker locker = createLocker(19);
-        Ticket ticket = locker.store();
+        Bag bag = new Bag();
+        Ticket ticket = locker.store(bag);
 
 //        when
-        Cupboard board = locker.pick(ticket.getPassword());
+        Bag pickBag = locker.pick(ticket);
 
 //        then
-        assertEquals(ticket.getNumber(), board.getNumber());
-        assertNotNull(board);
-        assertEquals(locker.getEmptyCount(), 19);
+        assertEquals(bag, pickBag);
     }
 
     @Test
-    void should_throw_exception_when_pick_given_wrong_password() {
+    void should_throw_exception_when_pick_given_invalid_ticket() {
 //        given
         Locker locker = createLocker(19);
-        locker.store();
+        Bag bag = new Bag();
+        Ticket ticket = locker.store(bag);
 
-        Cupboard board = null;
-        try {
+        Ticket invalidTicket = new Ticket();
+        // then
+        assertThrows(InvalidTicketException.class, () -> {
             //        when
-            board = locker.pick("wrong");
-        } catch (InvalidPasswordException e) {
-            //        then
-            assertNull(board);
-        } finally {
-            //        then
-            assertEquals(locker.getEmptyCount(), 18);
-        }
+            Bag pickBag = locker.pick(invalidTicket);
+        });
     }
 
     @Test
-    void should_throw_exception_when_pick_given_used_password() {
+    void should_throw_exception_when_pick_given_used_ticket() {
 //        given
         Locker locker = createLocker(1);
-        Ticket ticket = locker.store();
-        locker.pick(ticket.getPassword());
+        Bag bag = new Bag();
+        Ticket ticket = locker.store(bag);
 
-        Cupboard board = null;
-        try {
+        Bag pickBag = locker.pick(ticket);
+
+        assertThrows(InvalidTicketException.class, () -> {
             //        when
-            board = locker.pick(ticket.getPassword());
-        } catch (InvalidPasswordException e) {
-            //        then
-            assertNull(board);
-        } finally {
-            //        then
-            assertEquals(locker.getEmptyCount(), 1);
-        }
-    }
-
-    @Test
-    void should_return_different_password_when_store_given_almost_fully_cupboards() {
-        //        given
-        int maxCap = 10000;
-        Locker locker = createLocker(maxCap);
-        Set<String> passwords = new HashSet<String>(maxCap);
-        for (int i = 0; i < maxCap; i++) {
-
-            // when
-            Ticket ticket = locker.store();
-
-            // then
-            assertFalse(passwords.contains(ticket.getPassword()));
-            passwords.add(ticket.getPassword());
-        }
+            locker.pick(ticket);
+        });
     }
 }

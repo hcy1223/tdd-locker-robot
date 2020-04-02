@@ -1,6 +1,6 @@
 package cn.xpbootcamp.gilded_rose;
 
-import cn.xpbootcamp.gilded_rose.exception.NoEmptyCupboardException;
+import cn.xpbootcamp.gilded_rose.exception.NoEmptyLockersException;
 import cn.xpbootcamp.gilded_rose.locker.Bag;
 import cn.xpbootcamp.gilded_rose.locker.Locker;
 import cn.xpbootcamp.gilded_rose.locker.Ticket;
@@ -30,7 +30,7 @@ public class LockerStoreTest {
         Locker locker = createLocker(0);
         Bag bag = new Bag();
 //        when
-        assertThrows(NoEmptyCupboardException.class, () -> {
+        assertThrows(NoEmptyLockersException.class, () -> {
             locker.store(bag);
         });
     }
@@ -46,4 +46,5 @@ public class LockerStoreTest {
         assertNotNull(ticket);
         assertEquals(locker.getEmptyCount(), 0);
     }
+
 }

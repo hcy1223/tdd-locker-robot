@@ -1,7 +1,7 @@
 package cn.xpbootcamp.gilded_rose.locker;
 
 import cn.xpbootcamp.gilded_rose.exception.InvalidTicketException;
-import cn.xpbootcamp.gilded_rose.exception.NoEmptyCupboardException;
+import cn.xpbootcamp.gilded_rose.exception.NoEmptyLockersException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +22,7 @@ public class Locker {
 
     public Ticket store(Bag bag) {
         if (getEmptyCount() < 1) {
-            throw new NoEmptyCupboardException("no empty cupboard");
+            throw new NoEmptyLockersException();
         }
 
         Ticket ticket = new Ticket();

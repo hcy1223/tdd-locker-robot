@@ -38,4 +38,18 @@ public class RobotTest {
             Ticket ticket = robot.store(bag);
         });
     }
+
+    @Test
+    void should_get_ticket_when_store_given_2_lockers_first_0_capacity_second_1_capacity() {
+        Locker firstLocker = createLocker(0);
+        Locker secondLocker = createLocker(1);
+        Robot robot = new Robot(asList(firstLocker, secondLocker));
+        Bag bag = new Bag();
+
+        Ticket ticket = robot.store(bag);
+
+        assertNotNull(ticket);
+        assertEquals(firstLocker.getEmptyCount(), 0);
+        assertEquals(secondLocker.getEmptyCount(), 0);
+    }
 }

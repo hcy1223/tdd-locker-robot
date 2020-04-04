@@ -36,7 +36,7 @@ public class RobotTest {
         Bag bag = new Bag();
 
         assertThrows(NoEmptyLockersException.class, () -> {
-            Ticket ticket = robot.store(bag);
+            robot.store(bag);
         });
     }
 
@@ -78,11 +78,11 @@ public class RobotTest {
         Robot robot = new Robot(asList(firstLocker, secondLocker));
         Bag bag = new Bag();
 
-        Ticket ticket = robot.store(bag);
+        robot.store(bag);
 
         Ticket invalidTicket = new Ticket();
         assertThrows(InvalidTicketException.class, () -> {
-            Bag pickBag = robot.pick(invalidTicket);
+            robot.pick(invalidTicket);
         });
     }
 }

@@ -48,7 +48,7 @@ public class LockerPickTest {
         Bag bag = new Bag();
         Ticket ticket = locker.store(bag);
 
-        Bag pickBag = locker.pick(ticket);
+        locker.pick(ticket);
 
         assertThrows(InvalidTicketException.class, () -> {
             //        when

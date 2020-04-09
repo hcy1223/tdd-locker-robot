@@ -2,7 +2,9 @@ package cn.xpbootcamp.gilded_rose.locker;
 
 import cn.xpbootcamp.gilded_rose.exception.InvalidTicketException;
 import cn.xpbootcamp.gilded_rose.exception.NoEmptyLockersException;
+import cn.xpbootcamp.gilded_rose.exception.NoEmptyRobotException;
 
+import java.util.Comparator;
 import java.util.List;
 
 public class Robot {
@@ -13,13 +15,13 @@ public class Robot {
     }
 
     public Ticket store(Bag bag) {
-        for (Locker locker : lockers) {
-            try {
-                return locker.store(bag);
-            } catch (NoEmptyLockersException ignored) {
-            }
+        try {
+            return lockers.stream()
+                    .max(Comparator.comparing(Locker::getEmptyCount))
+                    .orElseThrow(NoEmptyLockersException::new).store(bag);
+        } catch (NoEmptyLockersException e) {
+            throw new NoEmptyRobotException();
         }
-        throw new NoEmptyLockersException();
     }
 
     public Bag pick(Ticket ticket) {

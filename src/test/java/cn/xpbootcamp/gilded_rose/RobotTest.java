@@ -52,4 +52,17 @@ public class RobotTest {
         assertEquals(secondLocker.getEmptyCount(), 1);
     }
 
+    @Test
+    void should_get_ticket_when_store_given_2_lockers_first_2_capacity_second_2_capacity() {
+        Locker firstLocker = createLocker(2);
+        Locker secondLocker = createLocker(2);
+        Robot robot = new Robot(asList(firstLocker, secondLocker));
+        Bag bag = new Bag();
+
+        Ticket ticket = robot.store(bag);
+
+        assertNotNull(ticket);
+        assertEquals(firstLocker.getEmptyCount(), 1);
+        assertEquals(secondLocker.getEmptyCount(), 2);
+    }
 }

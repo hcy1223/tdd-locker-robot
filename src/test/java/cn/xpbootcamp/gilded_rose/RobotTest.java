@@ -65,4 +65,21 @@ public class RobotTest {
         assertEquals(firstLocker.getEmptyCount(), 1);
         assertEquals(secondLocker.getEmptyCount(), 2);
     }
+
+    @Test
+    void should_get_bag_when_pick_given_valid_ticket() {
+        Locker firstLocker = createLocker(1);
+        Locker secondLocker = createLocker(2);
+        Robot robot = new Robot(asList(firstLocker, secondLocker));
+        Bag bag = new Bag();
+
+        Ticket ticket = robot.store(bag);
+
+        Bag pickBag = robot.pick(ticket);
+
+        assertEquals(bag, pickBag);
+        assertEquals(firstLocker.getEmptyCount(), 1);
+        assertEquals(secondLocker.getEmptyCount(), 2);
+    }
+
 }

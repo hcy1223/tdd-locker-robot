@@ -1,12 +1,16 @@
 package cn.xpbootcamp.gilded_rose;
 
-import cn.xpbootcamp.gilded_rose.locker.*;
+import cn.xpbootcamp.gilded_rose.exception.NoEmptyRobotException;
+import cn.xpbootcamp.gilded_rose.locker.Bag;
+import cn.xpbootcamp.gilded_rose.locker.Locker;
+import cn.xpbootcamp.gilded_rose.locker.SuperLockerRobot;
+import cn.xpbootcamp.gilded_rose.locker.Ticket;
+import com.google.common.collect.ImmutableList;
 import org.junit.jupiter.api.Test;
 
 import static cn.xpbootcamp.gilded_rose.locker.Locker.createLocker;
 import static java.util.Arrays.asList;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SuperLockerTest {
 
@@ -69,4 +73,18 @@ public class SuperLockerTest {
         assertSame(thirdBag, firstLocker.pick(thirdTicket));
     }
 
+    @Test
+    void should_store_failure_when_store_given_empty_locker() {
+        Locker firstLocker = createLocker(1);
+        SuperLockerRobot robot = new SuperLockerRobot(ImmutableList.of(firstLocker));
+        Bag firstBag = new Bag();
+        Bag secondBag = new Bag();
+
+        Ticket firstTicket = robot.store(firstBag);
+
+        assertNotNull(firstTicket);
+        assertThrows(NoEmptyRobotException.class, () -> {
+            robot.store(secondBag);
+        });
+    }
 }

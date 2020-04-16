@@ -1,5 +1,6 @@
 package cn.xpbootcamp.gilded_rose.locker;
 
+import cn.xpbootcamp.gilded_rose.exception.InvalidTicketException;
 import cn.xpbootcamp.gilded_rose.exception.NoEmptyLockersException;
 import cn.xpbootcamp.gilded_rose.exception.NoEmptyRobotException;
 
@@ -21,5 +22,15 @@ public class SuperLockerRobot {
         } catch (NoEmptyLockersException e) {
             throw new NoEmptyRobotException();
         }
+    }
+
+    public Bag pick(Ticket ticket) {
+        for (Locker locker : lockers) {
+            try {
+                return locker.pick(ticket);
+            } catch (InvalidTicketException ignored) {
+            }
+        }
+        throw new InvalidTicketException();
     }
 }

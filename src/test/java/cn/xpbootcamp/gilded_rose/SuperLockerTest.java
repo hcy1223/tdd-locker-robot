@@ -1,10 +1,7 @@
 package cn.xpbootcamp.gilded_rose;
 
 import cn.xpbootcamp.gilded_rose.exception.NoEmptyRobotException;
-import cn.xpbootcamp.gilded_rose.locker.Bag;
-import cn.xpbootcamp.gilded_rose.locker.Locker;
-import cn.xpbootcamp.gilded_rose.locker.SuperLockerRobot;
-import cn.xpbootcamp.gilded_rose.locker.Ticket;
+import cn.xpbootcamp.gilded_rose.locker.*;
 import com.google.common.collect.ImmutableList;
 import org.junit.jupiter.api.Test;
 
@@ -87,4 +84,19 @@ public class SuperLockerTest {
             robot.store(secondBag);
         });
     }
+
+    @Test
+    void should_get_bag_when_pick_given_valid_ticket() {
+        Locker firstLocker = createLocker(1);
+        Locker secondLocker = createLocker(2);
+        SuperLockerRobot robot = new SuperLockerRobot(asList(firstLocker, secondLocker));
+        Bag bag = new Bag();
+
+        Ticket ticket = robot.store(bag);
+
+        Bag pickBag = robot.pick(ticket);
+
+        assertSame(bag, pickBag);
+    }
+
 }

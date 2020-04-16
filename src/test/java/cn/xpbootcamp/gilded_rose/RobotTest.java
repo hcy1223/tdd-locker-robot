@@ -24,8 +24,7 @@ public class RobotTest {
         Ticket ticket = robot.store(bag);
 
         assertNotNull(ticket);
-        assertEquals(firstLocker.getEmptyCount(), 1);
-        assertEquals(secondLocker.getEmptyCount(), 1);
+        assertSame(bag, secondLocker.pick(ticket));
     }
     @Test
     void should_store_failure_when_store_given_2_lockers_first_0_capacity_second_0_capacity() {
@@ -49,8 +48,7 @@ public class RobotTest {
         Ticket ticket = robot.store(bag);
 
         assertNotNull(ticket);
-        assertEquals(firstLocker.getEmptyCount(), 1);
-        assertEquals(secondLocker.getEmptyCount(), 1);
+        assertSame(bag, firstLocker.pick(ticket));
     }
 
     @Test
@@ -63,8 +61,7 @@ public class RobotTest {
         Ticket ticket = robot.store(bag);
 
         assertNotNull(ticket);
-        assertEquals(firstLocker.getEmptyCount(), 1);
-        assertEquals(secondLocker.getEmptyCount(), 2);
+        assertSame(bag, firstLocker.pick(ticket));
     }
 
     @Test
@@ -78,9 +75,7 @@ public class RobotTest {
 
         Bag pickBag = robot.pick(ticket);
 
-        assertEquals(bag, pickBag);
-        assertEquals(firstLocker.getEmptyCount(), 1);
-        assertEquals(secondLocker.getEmptyCount(), 2);
+        assertSame(bag, pickBag);
     }
 
     @Test

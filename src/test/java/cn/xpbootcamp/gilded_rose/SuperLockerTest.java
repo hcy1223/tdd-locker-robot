@@ -41,8 +41,12 @@ public class SuperLockerTest {
         Ticket thirdTicket = robot.store(thirdBag);
 
         assertNotNull(firstTicket);
+        assertNotNull(secondTicket);
+        assertNotNull(thirdTicket);
         assertSame(firstBag, firstLocker.pick(firstTicket));
         assertSame(secondBag, secondLocker.pick(secondTicket));
         assertSame(thirdBag, secondLocker.pick(thirdTicket));
     }
+
+
 }

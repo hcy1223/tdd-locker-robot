@@ -48,5 +48,25 @@ public class SuperLockerTest {
         assertSame(thirdBag, secondLocker.pick(thirdTicket));
     }
 
+    @Test
+    void should_get_three_ticket_when_store_given_first_locker_is_six_and_second_is_three() {
+        Locker firstLocker = createLocker(6);
+        Locker secondLocker = createLocker(3);
+        SuperLockerRobot robot = new SuperLockerRobot(asList(firstLocker, secondLocker));
+        Bag firstBag = new Bag();
+        Bag secondBag = new Bag();
+        Bag thirdBag = new Bag();
+
+        Ticket firstTicket = robot.store(firstBag);
+        Ticket secondTicket = robot.store(secondBag);
+        Ticket thirdTicket = robot.store(thirdBag);
+
+        assertNotNull(firstTicket);
+        assertNotNull(secondTicket);
+        assertNotNull(thirdTicket);
+        assertSame(firstBag, firstLocker.pick(firstTicket));
+        assertSame(secondBag, secondLocker.pick(secondTicket));
+        assertSame(thirdBag, firstLocker.pick(thirdTicket));
+    }
 
 }

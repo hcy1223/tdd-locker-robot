@@ -7,10 +7,10 @@ import cn.xpbootcamp.gilded_rose.exception.NoEmptyRobotException;
 import java.util.Comparator;
 import java.util.List;
 
-public class Robot {
+public class SmartLockerRobot {
     private List<Locker> lockers;
 
-    public Robot(List<Locker> lockers) {
+    public SmartLockerRobot(List<Locker> lockers) {
         this.lockers = lockers;
     }
 

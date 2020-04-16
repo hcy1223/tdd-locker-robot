@@ -17,6 +17,7 @@ public class Locker {
     }
 
     public static Locker createLocker(int capacity) {
+        if (capacity < 1) throw new RuntimeException("capacity invalid");
         return new Locker(capacity);
     }
 
@@ -32,6 +33,10 @@ public class Locker {
 
     public int getEmptyCount() {
         return capacity - usedLocker.size();
+    }
+
+    public float getEmptyPercent() {
+        return (capacity - usedLocker.size()) / (float) capacity;
     }
 
     public Bag pick(Ticket ticket) {
